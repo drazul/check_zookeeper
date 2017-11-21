@@ -50,7 +50,7 @@ class NagiosHandler(object):
         if critical is None:
             return False
         if warning is None:
-            return value <= critical
+            return value >= critical
 
         if critical > warning:
             return critical <= value
@@ -61,7 +61,7 @@ class NagiosHandler(object):
         if warning is None:
             return False
         if critical is None:
-            return value <= warning
+            return value >= warning
 
         if critical > warning:
             return warning <= value
@@ -76,15 +76,17 @@ class NagiosHandler(object):
             n = k.count(',')
             if n == 2:
                 name, w, c = k.split(',')
+                if w == '':
+                    w = None
             elif n == 1:
-                name, c = k.split(',')
+                name, w = k.split(',')
             elif n > 2:
                 print("Too many values for key. Format: 'name|name:c|name:w:c'. Ignored.", file=sys.stderr)
                 continue
             else:
                 name = k
 
-            limits[name] = (int(w), int(c))
+            limits[name] = (int(w) if w else None, int(c) if c else None)
         return limits
         
     def analyze(self, args, cluster_stats):
