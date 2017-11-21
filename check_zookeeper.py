@@ -120,7 +120,7 @@ class NagiosHandler(object):
             output_status = 0
             
         output_str += 'critical\n' + '\n'.join(critical_state) + '\nwarning\n' + '\n'.join(warning_state) + '\n'
-        output_str += '|\n' + '\n'.join(values)
+        output_str += '|' + ' '.join(values)
         print(output_str)
         return output_status
 
